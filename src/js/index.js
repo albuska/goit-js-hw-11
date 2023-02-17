@@ -1,5 +1,5 @@
 import Notiflix from 'notiflix';
-import { fetchPhotos } from './fetchPhotos'; 
+import { getData } from './axiosPhotos'; 
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
@@ -7,6 +7,17 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 const formRef = document.getElementById('search-form');
 const containerGalleryRef = document.querySelector('.gallery');
 const btnLoadMore = document.querySelector('.load-more'); 
+
+let pages = 1; 
+
+// const { height: cardHeight } = document
+//   .querySelector(".gallery")
+//   .firstElementChild.getBoundingClientRect();
+
+// window.scrollBy({
+//   top: cardHeight * 2,
+//   behavior: "smooth",
+// });
 
 formRef.addEventListener('submit', onFormSubmit);
 btnLoadMore.addEventListener("click", loadMore);
@@ -17,19 +28,20 @@ function onFormSubmit(e) {
 const searchValue = e.currentTarget.elements.searchQuery.value;
 console.log("🚀 ~ searchValue", searchValue); 
 
-fetchPhotos(searchValue).then((data) => {
+getData(searchValue).then(({hits, totalHits}) => {
+   npages = Math.round(totalHits / 40);
     onClear();
-    if(data.totalHits === 0) {
-        fetchError(); 
+
+    if(totalHits === 0) {
+        axiosError(); 
     } else {
-        onRenderContainerOfItem(data.hits);
-        Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`); 
-           
+        onRenderContainerOfItem(hits);
+        Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);      
     }
-}).catch(fetchError); 
+}) 
 }
 
-function fetchError() {
+function axiosError() {
     Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
 }
 
@@ -67,6 +79,10 @@ let page = 1;
 
 function loadMore() {
 page +=1; 
+
+if (page === pages) {
+    btnLoadMore.hidden = true;
+    }
 }
 
 function onClear() {

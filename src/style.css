@@ -84,12 +84,13 @@ input:focus {
   }
 
   .load-more {
-    display: flex;
-    margin: 0 auto;
-    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 20px;
     text-transform: uppercase;
     color: #ffffff;
-    background-color: rgb(2, 2, 102);
+    background-color: rgb(60, 60, 194);
+    cursor: pointer;
   }
 
   /* :root {
