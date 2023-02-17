@@ -8,19 +8,29 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-   <section class="section">
+   <section class="header">
         <div class="container">
             <form class="search-form" id="search-form">
-                <input
-                  type="text"
-                  name="searchQuery"
-                  autocomplete="off"
-                  placeholder="Search images..."
-                />
-                <button type="submit">Search</button>
+                <div class="overlay">
+                  <input
+                    type="text"
+                    name="searchQuery"
+                    autocomplete="off"
+                    placeholder="Search images..."
+                  />
+                  <button type="submit" class="button-submit">
+                    <svg class="icon icon-search"><use href="./images/search.svg#icon-search"></use></svg>
+                  </button>
+                </div>
               </form>
         </div >
    </section>
-<script src="./js/index.js"></script>   
+     <section class="container"> 
+       <div class="gallery">
+        <!-- Картки зображень -->
+     </div>
+     <button type="button" class="load-more">Load more</button>
+    </section>
+<script src="./js/index.js" type="module"></script>   
 </body>
 </html>

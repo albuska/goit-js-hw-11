@@ -1,4 +1,4 @@
-.section {
+.header {
     background-color: rgb(60, 60, 194);
 }
 
@@ -6,18 +6,114 @@
     width: 1170px;
     padding-left: 15px;
     padding-right: 15px;
-    margin: o auto;
+    margin: 0 auto;
 }
 
 .search-form {
+    padding: 10px;
     display: flex;
     justify-content: center;
 }
 
 input {
-border-radius: 3px; 
+    border: none;
+    width: 300px;
+    padding: 8px;
+    border-radius: 5px; 
 }
 
-button {
-    display: block;
+input:focus {
+    outline: none;
 }
+
+.button-submit {
+    position: absolute;
+    display: block;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    left: 21em;
+    top: 0em;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.icon {
+    display: inline-block;
+    width: 1.9em;
+    height: 1.9em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+    cursor: pointer;
+  }
+
+  .overlay {
+    position: relative;
+  }
+  
+  .gallery {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  img {
+    display: block;
+  }
+
+  .info {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06), 1px 4px 6px rgba(0, 0, 0, 0.16);
+   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15); 
+  } 
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    align-items: center;
+  }
+
+  .photo-card {
+    cursor: pointer;
+  }
+
+  .load-more {
+    display: flex;
+    margin: 0 auto;
+    padding: 5px;
+    text-transform: uppercase;
+    color: #ffffff;
+    background-color: rgb(2, 2, 102);
+  }
+
+  /* :root {
+    --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-duration: 250ms;
+  } */
+
+   /* .gallery {
+    display: grid;
+    max-width: 1140px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-auto-rows: 240px;
+    grid-gap: 12px;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+   }
+  
+   .gallery__link {
+    display: block;
+    text-decoration: none;
+    height: 100%;
+  }
+  
+  .gallery__link:hover {
+    cursor: zoom-in;
+  }  */
