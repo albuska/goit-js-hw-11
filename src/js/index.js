@@ -22,7 +22,7 @@ preloaderStop();
 
 function onFormSubmit(e) {
     e.preventDefault(); 
-
+preloaderStart();
 objectPage.searchValue = e.currentTarget.elements.searchQuery.value.trim();
 resetPage();
  
@@ -32,9 +32,13 @@ getData(objectPage.searchValue).then(({hits, totalHits}) => {
     if(totalHits === 0 || objectPage.searchValue === '') {
       // btnLoadMore.hidden = true;
         axiosError(); 
+
+        preloaderStop(); 
     } else {  
-      preloaderStart();
+      
         onRenderContainerOfItem(hits);
+
+        preloaderStart();
         observer.observe(guard);
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
         // btnLoadMore.hidden = false;
@@ -129,6 +133,7 @@ function onLoad(entries) {
 entries.forEach((entry) => {
   console.log(entry.isIntersecting);
 if(entry.isIntersecting) {
+  preloaderStart();
   incrementPage();
 
   getData(objectPage.searchValue).then(({hits, totalHits}) => {
@@ -141,7 +146,7 @@ if(entry.isIntersecting) {
       observer.unobserve(guard);
       Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
 
-      
+    preloaderStop(); 
     }
   })   
 }
