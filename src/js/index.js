@@ -143,9 +143,9 @@ if(entry.isIntersecting) {
 
     const pages = Math.round(totalHits / objectPage.per_page); 
     if(objectPage.page === pages) {
-      observer.unobserve(guard);
+     
       Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
-
+      observer.unobserve(guard);
     preloaderStop(); 
     }
   })   
