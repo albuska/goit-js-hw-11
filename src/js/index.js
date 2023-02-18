@@ -6,37 +6,43 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 const formRef = document.getElementById('search-form');
 const containerGalleryRef = document.querySelector('.gallery');
-const btnLoadMore = document.querySelector('.load-more'); 
+// const btnLoadMore = document.querySelector('.load-more'); 
+const guard = document.querySelector(".js-guard");
 
-let pages = 1; 
+let pages = 0; 
 
-// const { height: cardHeight } = document
-//   .querySelector(".gallery")
-//   .firstElementChild.getBoundingClientRect();
-
-// window.scrollBy({
-//   top: cardHeight * 2,
-//   behavior: "smooth",
-// });
 
 formRef.addEventListener('submit', onFormSubmit);
-btnLoadMore.addEventListener("click", loadMore);
+// btnLoadMore.addEventListener("click", loadMore);
 
 function onFormSubmit(e) {
     e.preventDefault(); 
 
 const searchValue = e.currentTarget.elements.searchQuery.value;
-console.log("🚀 ~ searchValue", searchValue); 
+ 
 
 getData(searchValue).then(({hits, totalHits}) => {
-   npages = Math.round(totalHits / 40);
+
+   pages = Math.round(totalHits / 40);
+  //  btnLoadMore.hidden = false;
+
     onClear();
 
-    if(totalHits === 0) {
+    if(totalHits === 0 || searchValue === '') {
         axiosError(); 
-    } else {
+    } else {  
+       observer.observe(guard);
         onRenderContainerOfItem(hits);
-        Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);      
+        Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+
+        const { height: cardHeight } = document
+        .querySelector(".gallery")
+        .firstElementChild.getBoundingClientRect();
+      
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: "smooth",
+      });    
     }
 }) 
 }
@@ -77,13 +83,13 @@ lightBoxGallery.refresh();
 
 let page = 1; 
 
-function loadMore() {
-page +=1; 
+// function loadMore() {
+// page +=1; 
 
-if (page === pages) {
-    btnLoadMore.hidden = true;
-    }
-}
+// if (page === pages) {
+//     btnLoadMore.hidden = true;
+//     }
+// }
 
 function onClear() {
     formRef.reset();
@@ -91,3 +97,28 @@ function onClear() {
 }
 
 const lightBoxGallery = new SimpleLightbox('.gallery a');
+
+
+const options = {
+  root: null,
+  rootMargin: "300px",
+};
+const observer = new IntersectionObserver(onLoad, options);
+
+function onLoad(entries) {
+  //   console.log(entries);
+  entries.forEach((entry) => {
+    console.log(entry.isIntersecting);
+    if (entry.isIntersecting) {
+      page += 1;
+      getData(page).then(({hits, totalHits}) => {
+        onRenderContainerOfItem(hits);
+    
+            // if (data.page === data.pages) {
+            //   observer.unobserve(guard);
+            // } 
+
+      }) 
+    }
+  });
+}
