@@ -3,11 +3,12 @@ import Notiflix from 'notiflix';
 import { getData, objectPage, incrementPage, resetPage } from './axiosPhotos'; 
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
+import { btnLoadMore, btnDisable, btnEnable } from './btnLoadMore'; 
 
 
 const formRef = document.getElementById('search-form');
 const containerGalleryRef = document.querySelector('.gallery');
-const btnLoadMore = document.querySelector('.load-more'); 
+// const btnLoadMore = document.querySelector('.load-more'); 
 // const guard = document.querySelector(".js-guard");
  
 
@@ -22,7 +23,7 @@ console.log(objectPage.searchValue);
  
 getData(objectPage.searchValue).then(({hits, totalHits}) => { 
     onClear();
-    // resetPage(); 
+    resetPage(); 
 
     if(totalHits === 0 || objectPage.searchValue === '') {
         axiosError(); 
@@ -81,16 +82,16 @@ lightBoxGallery.refresh();
 
 
 function loadMore() {
+  btnDisable(); 
   incrementPage();  
   getData(objectPage.searchValue).then(({hits, totalHits}) => {
   onRenderContainerOfItem(hits);
+  btnEnable(); 
   const pages = Math.round(totalHits / objectPage.per_page);
   console.log("🚀 ~ getData ~ pages", pages);
  
   if (objectPage.page === pages) {
     btnLoadMore.hidden = true;
-
-  
     }
 })
 }

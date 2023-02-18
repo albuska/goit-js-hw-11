@@ -26,3 +26,4 @@ export function incrementPage() {
 export function resetPage() {
     objectPage.page = 1;
   }
+
