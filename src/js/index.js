@@ -23,7 +23,7 @@ console.log(objectPage.searchValue);
  
 getData(objectPage.searchValue).then(({hits, totalHits}) => { 
     onClear();
-    resetPage(); 
+
 
     if(totalHits === 0 || objectPage.searchValue === '') {
         axiosError(); 
@@ -78,21 +78,26 @@ const markup = items.map(({webformatURL, largeImageURL, tags, likes, views, comm
     }).join(""); 
 containerGalleryRef.insertAdjacentHTML('beforeend', markup);  
 lightBoxGallery.refresh();
-}
+}  
 
+resetPage(); 
 
 function loadMore() {
   btnDisable(); 
   incrementPage();  
+ 
   getData(objectPage.searchValue).then(({hits, totalHits}) => {
   onRenderContainerOfItem(hits);
+
   btnEnable(); 
   const pages = Math.round(totalHits / objectPage.per_page);
   console.log("🚀 ~ getData ~ pages", pages);
  
   if (objectPage.page === pages) {
     btnLoadMore.hidden = true;
+    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
     }
+
 })
 }
 
@@ -126,3 +131,4 @@ const lightBoxGallery = new SimpleLightbox('.gallery a');
 //     }
 //   });
 // }
+
