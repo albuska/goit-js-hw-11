@@ -10,7 +10,7 @@ const formRef = document.getElementById('search-form');
 const containerGalleryRef = document.querySelector('.gallery');
 // const btnLoadMore = document.querySelector('.load-more'); 
 // const guard = document.querySelector(".js-guard");
- 
+  
 
 formRef.addEventListener('submit', onFormSubmit);
 btnLoadMore.addEventListener("click", loadMore);
@@ -23,7 +23,7 @@ console.log(objectPage.searchValue);
  
 getData(objectPage.searchValue).then(({hits, totalHits}) => { 
     onClear();
-
+    resetPage(); 
 
     if(totalHits === 0 || objectPage.searchValue === '') {
         axiosError(); 
@@ -80,7 +80,6 @@ containerGalleryRef.insertAdjacentHTML('beforeend', markup);
 lightBoxGallery.refresh();
 }  
 
-resetPage(); 
 
 function loadMore() {
   btnDisable(); 
@@ -88,10 +87,10 @@ function loadMore() {
  
   getData(objectPage.searchValue).then(({hits, totalHits}) => {
   onRenderContainerOfItem(hits);
-
+ 
   btnEnable(); 
   const pages = Math.round(totalHits / objectPage.per_page);
-  console.log("🚀 ~ getData ~ pages", pages);
+
  
   if (objectPage.page === pages) {
     btnLoadMore.hidden = true;
@@ -104,6 +103,7 @@ function loadMore() {
 function onClear() {
     formRef.reset();
     containerGalleryRef.innerHTML = '';
+   
 }
 
 const lightBoxGallery = new SimpleLightbox('.gallery a');
