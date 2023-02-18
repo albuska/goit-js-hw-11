@@ -1,39 +1,36 @@
 import Notiflix from 'notiflix';
-import { getData } from './axiosPhotos'; 
+// import { getData } from './axiosPhotos';
+import { getData, objectPage, incrementPage, resetPage } from './axiosPhotos'; 
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
 
 const formRef = document.getElementById('search-form');
 const containerGalleryRef = document.querySelector('.gallery');
-// const btnLoadMore = document.querySelector('.load-more'); 
-const guard = document.querySelector(".js-guard");
-
-let pages = 0; 
-
+const btnLoadMore = document.querySelector('.load-more'); 
+// const guard = document.querySelector(".js-guard");
+ 
 
 formRef.addEventListener('submit', onFormSubmit);
-// btnLoadMore.addEventListener("click", loadMore);
+btnLoadMore.addEventListener("click", loadMore);
 
 function onFormSubmit(e) {
     e.preventDefault(); 
 
-const searchValue = e.currentTarget.elements.searchQuery.value;
+objectPage.searchValue = e.currentTarget.elements.searchQuery.value.trim();
+console.log(objectPage.searchValue);
  
-
-getData(searchValue).then(({hits, totalHits}) => {
-
-   pages = Math.round(totalHits / 40);
-  //  btnLoadMore.hidden = false;
-
+getData(objectPage.searchValue).then(({hits, totalHits}) => { 
     onClear();
+    // resetPage(); 
 
-    if(totalHits === 0 || searchValue === '') {
+    if(totalHits === 0 || objectPage.searchValue === '') {
         axiosError(); 
     } else {  
-       observer.observe(guard);
+      //  observer.observe(guard);
         onRenderContainerOfItem(hits);
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+        btnLoadMore.hidden = false;
 
         const { height: cardHeight } = document
         .querySelector(".gallery")
@@ -45,6 +42,7 @@ getData(searchValue).then(({hits, totalHits}) => {
       });    
     }
 }) 
+
 }
 
 function axiosError() {
@@ -81,15 +79,21 @@ containerGalleryRef.insertAdjacentHTML('beforeend', markup);
 lightBoxGallery.refresh();
 }
 
-let page = 1; 
 
-// function loadMore() {
-// page +=1; 
+function loadMore() {
+  incrementPage();  
+  getData(objectPage.searchValue).then(({hits, totalHits}) => {
+  onRenderContainerOfItem(hits);
+  const pages = Math.round(totalHits / objectPage.per_page);
+  console.log("🚀 ~ getData ~ pages", pages);
+ 
+  if (objectPage.page === pages) {
+    btnLoadMore.hidden = true;
 
-// if (page === pages) {
-//     btnLoadMore.hidden = true;
-//     }
-// }
+  
+    }
+})
+}
 
 function onClear() {
     formRef.reset();
@@ -99,26 +103,25 @@ function onClear() {
 const lightBoxGallery = new SimpleLightbox('.gallery a');
 
 
-const options = {
-  root: null,
-  rootMargin: "300px",
-};
-const observer = new IntersectionObserver(onLoad, options);
+// const options = {
+//   root: null,
+//   rootMargin: "300px",
+// };
+// const observer = new IntersectionObserver(onLoad, options);
 
-function onLoad(entries) {
-  //   console.log(entries);
-  entries.forEach((entry) => {
-    console.log(entry.isIntersecting);
-    if (entry.isIntersecting) {
-      page += 1;
-      getData(page).then(({hits, totalHits}) => {
-        onRenderContainerOfItem(hits);
+// function onLoad(entries) {
+//   //   console.log(entries);
+//   entries.forEach((entry) => {
+//     console.log(entry.isIntersecting);
+//     if (entry.isIntersecting) {
+//       page += 1;
+//       getData(page)
     
-            // if (data.page === data.pages) {
-            //   observer.unobserve(guard);
-            // } 
+//             // if (data.page === data.pages) {
+//             //   observer.unobserve(guard);
+//             // } 
 
-      }) 
-    }
-  });
-}
+//       // }) 
+//     }
+//   });
+// }
