@@ -4,7 +4,7 @@ import { getData, objectPage, incrementPage, resetPage } from './axiosPhotos';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 // import { btnLoadMore, btnDisable, btnEnable } from './btnLoadMore'; 
-
+import { preloaderStart, preloaderStop } from './preloader';
 
 const formRef = document.getElementById('search-form');
 const containerGalleryRef = document.querySelector('.gallery');
@@ -17,6 +17,9 @@ console.log("🚀 ~ guard", guard);
 formRef.addEventListener('submit', onFormSubmit);
 // btnLoadMore.addEventListener("click", loadMore);
 
+preloaderStart();
+preloaderStop();
+
 function onFormSubmit(e) {
     e.preventDefault(); 
 
@@ -25,17 +28,17 @@ resetPage();
  
 getData(objectPage.searchValue).then(({hits, totalHits}) => { 
     onClear();
-
+ 
     if(totalHits === 0 || objectPage.searchValue === '') {
       // btnLoadMore.hidden = true;
         axiosError(); 
     } else {  
-
+      preloaderStart();
         onRenderContainerOfItem(hits);
         observer.observe(guard);
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
         // btnLoadMore.hidden = false;
-
+   
         const { height: cardHeight } = document
         .querySelector(".gallery")
         .firstElementChild.getBoundingClientRect();
@@ -51,6 +54,7 @@ getData(objectPage.searchValue).then(({hits, totalHits}) => {
 
 function axiosError() {
     Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+   
 }
 
 function onRenderContainerOfItem(items) {
@@ -119,6 +123,8 @@ const options = {
 const observer = new IntersectionObserver(onLoad, options);
 
 function onLoad(entries) {
+
+  preloaderStart(); 
     console.log(entries);
 entries.forEach((entry) => {
   console.log(entry.isIntersecting);
@@ -127,11 +133,15 @@ if(entry.isIntersecting) {
 
   getData(objectPage.searchValue).then(({hits, totalHits}) => {
     onRenderContainerOfItem(hits); 
-     
+   
+    preloaderStop();
+
     const pages = Math.round(totalHits / objectPage.per_page); 
     if(objectPage.page === pages) {
       observer.unobserve(guard);
       Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
+
+      
     }
   })   
 }
