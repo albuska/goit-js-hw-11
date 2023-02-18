@@ -3,35 +3,38 @@ import Notiflix from 'notiflix';
 import { getData, objectPage, incrementPage, resetPage } from './axiosPhotos'; 
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-import { btnLoadMore, btnDisable, btnEnable } from './btnLoadMore'; 
+// import { btnLoadMore, btnDisable, btnEnable } from './btnLoadMore'; 
 
 
 const formRef = document.getElementById('search-form');
 const containerGalleryRef = document.querySelector('.gallery');
 // const btnLoadMore = document.querySelector('.load-more'); 
-// const guard = document.querySelector(".js-guard");
+const guard = document.querySelector('.js-guard');
+console.log("🚀 ~ guard", guard);
+
   
 
 formRef.addEventListener('submit', onFormSubmit);
-btnLoadMore.addEventListener("click", loadMore);
+// btnLoadMore.addEventListener("click", loadMore);
 
 function onFormSubmit(e) {
     e.preventDefault(); 
 
 objectPage.searchValue = e.currentTarget.elements.searchQuery.value.trim();
-console.log(objectPage.searchValue);
+resetPage();
  
 getData(objectPage.searchValue).then(({hits, totalHits}) => { 
     onClear();
-    resetPage(); 
 
     if(totalHits === 0 || objectPage.searchValue === '') {
+      // btnLoadMore.hidden = true;
         axiosError(); 
     } else {  
-      //  observer.observe(guard);
+
         onRenderContainerOfItem(hits);
+        observer.observe(guard);
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-        btnLoadMore.hidden = false;
+        // btnLoadMore.hidden = false;
 
         const { height: cardHeight } = document
         .querySelector(".gallery")
@@ -81,24 +84,24 @@ lightBoxGallery.refresh();
 }  
 
 
-function loadMore() {
-  btnDisable(); 
-  incrementPage();  
+// function loadMore() {
+//   btnDisable(); 
+//   incrementPage();  
  
-  getData(objectPage.searchValue).then(({hits, totalHits}) => {
-  onRenderContainerOfItem(hits);
+//   getData(objectPage.searchValue).then(({hits, totalHits}) => {
+//   onRenderContainerOfItem(hits);
  
-  btnEnable(); 
-  const pages = Math.round(totalHits / objectPage.per_page);
+//   btnEnable(); 
+//   const pages = Math.round(totalHits / objectPage.per_page);
 
  
-  if (objectPage.page === pages) {
-    btnLoadMore.hidden = true;
-    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
-    }
+//   if (objectPage.page === pages) {
+//     btnLoadMore.hidden = true;
+//     Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
+//     }
 
-})
-}
+// })
+// }
 
 function onClear() {
     formRef.reset();
@@ -109,26 +112,28 @@ function onClear() {
 const lightBoxGallery = new SimpleLightbox('.gallery a');
 
 
-// const options = {
-//   root: null,
-//   rootMargin: "300px",
-// };
-// const observer = new IntersectionObserver(onLoad, options);
+const options = {
+  root: null,
+  rootMargin: "300px",
+};
+const observer = new IntersectionObserver(onLoad, options);
 
-// function onLoad(entries) {
-//   //   console.log(entries);
-//   entries.forEach((entry) => {
-//     console.log(entry.isIntersecting);
-//     if (entry.isIntersecting) {
-//       page += 1;
-//       getData(page)
-    
-//             // if (data.page === data.pages) {
-//             //   observer.unobserve(guard);
-//             // } 
+function onLoad(entries) {
+    console.log(entries);
+entries.forEach((entry) => {
+  console.log(entry.isIntersecting);
+if(entry.isIntersecting) {
+  incrementPage();
 
-//       // }) 
-//     }
-//   });
-// }
-
+  getData(objectPage.searchValue).then(({hits, totalHits}) => {
+    onRenderContainerOfItem(hits); 
+     
+    const pages = Math.round(totalHits / objectPage.per_page); 
+    if(objectPage.page === pages) {
+      observer.unobserve(guard);
+      Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
+    }
+  })   
+}
+}) 
+}
