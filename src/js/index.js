@@ -100,7 +100,7 @@ lightBoxGallery.refresh();
 //   onRenderContainerOfItem(hits);
  
 //   btnEnable(); 
-//   const pages = Math.round(totalHits / objectPage.per_page);
+//   const pages = Math.ceil(totalHits / objectPage.per_page);
 
  
 //   if (objectPage.page === pages) {
@@ -137,18 +137,20 @@ if(entry.isIntersecting) {
   incrementPage();
 
   getData(objectPage.searchValue).then(({hits, totalHits}) => {
+
     onRenderContainerOfItem(hits); 
    
     preloaderStop();
 
-    const pages = Math.round(totalHits / objectPage.per_page); 
-    if(objectPage.page === pages) {
+    const pages = Math.ceil(totalHits / objectPage.per_page); 
+    if(objectPage.page >= pages) {
      
       Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
-      observer.unobserve(guard);
+          observer.unobserve(guard);
     preloaderStop(); 
     }
   })   
+
 }
 }) 
 }
