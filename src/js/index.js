@@ -42,15 +42,6 @@ getData(objectPage.searchValue).then(({hits, totalHits}) => {
         observer.observe(guard);
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
         // btnLoadMore.hidden = false;
-   
-        const { height: cardHeight } = document
-        .querySelector(".gallery")
-        .firstElementChild.getBoundingClientRect();
-      
-      window.scrollBy({
-        top: cardHeight * 2,
-        behavior: "smooth",
-      });    
     }
 }) 
 
@@ -128,6 +119,15 @@ const observer = new IntersectionObserver(onLoad, options);
 
 function onLoad(entries) {
 
+      //   const { height: cardHeight } = document
+      //   .querySelector(".gallery")
+      //   .firstElementChild.getBoundingClientRect();
+      
+      // window.scrollBy({
+      //   top: cardHeight * 2,
+      //   behavior: "smooth",
+      // }); 
+
   preloaderStart(); 
     console.log(entries);
 entries.forEach((entry) => {
@@ -139,6 +139,16 @@ if(entry.isIntersecting) {
   getData(objectPage.searchValue).then(({hits, totalHits}) => {
 
     onRenderContainerOfItem(hits); 
+
+
+      //       const { height: cardHeight } = document
+      //   .querySelector(".gallery")
+      //   .firstElementChild.getBoundingClientRect();
+      
+      // window.scrollBy({
+      //   top: cardHeight * 2,
+      //   behavior: "smooth",
+      // }); 
    
     preloaderStop();
 
