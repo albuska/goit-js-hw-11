@@ -119,15 +119,6 @@ const observer = new IntersectionObserver(onLoad, options);
 
 function onLoad(entries) {
 
-      //   const { height: cardHeight } = document
-      //   .querySelector(".gallery")
-      //   .firstElementChild.getBoundingClientRect();
-      
-      // window.scrollBy({
-      //   top: cardHeight * 2,
-      //   behavior: "smooth",
-      // }); 
-
   preloaderStart(); 
     console.log(entries);
 entries.forEach((entry) => {
@@ -140,15 +131,14 @@ if(entry.isIntersecting) {
 
     onRenderContainerOfItem(hits); 
 
-
-      //       const { height: cardHeight } = document
-      //   .querySelector(".gallery")
-      //   .firstElementChild.getBoundingClientRect();
+            const { height: cardHeight } = document
+        .querySelector(".gallery")
+        .firstElementChild.getBoundingClientRect();
       
-      // window.scrollBy({
-      //   top: cardHeight * 2,
-      //   behavior: "smooth",
-      // }); 
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: "smooth",
+      }); 
    
     preloaderStop();
 
