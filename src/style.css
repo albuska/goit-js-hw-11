@@ -1,10 +1,18 @@
+body {
+  margin: 0;
+  position: relative;
+}
+
 .header {
     /* background-color: rgb(60, 60, 194); */
-  /* background: -webkit-linear-gradient(to right, #1e9600, #fff200, #ff0000);  */
+    position: fixed;
   background: linear-gradient(to right, #1e9600, #fff200, #ff0000); 
+ width: 100%; 
+ /* z-index: 1;  */
 }
 
 .container {
+
     width: 1170px;
     padding-left: 15px;
     padding-right: 15px;
@@ -12,6 +20,7 @@
 }
 
 .search-form {
+
     padding: 10px;
     display: flex;
     justify-content: center;

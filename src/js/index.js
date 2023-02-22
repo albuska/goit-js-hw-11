@@ -28,7 +28,7 @@ resetPage();
  
 getData(objectPage.searchValue).then(({hits, totalHits}) => { 
     onClear();
- 
+    window.scrollTo(document.body, 0, 600);
     if(totalHits === 0 || objectPage.searchValue === '') {
       // btnLoadMore.hidden = true;
         axiosError(); 
@@ -131,6 +131,7 @@ if(entry.isIntersecting) {
 
     onRenderContainerOfItem(hits); 
 
+
             const { height: cardHeight } = document
         .querySelector(".gallery")
         .firstElementChild.getBoundingClientRect();
@@ -144,7 +145,7 @@ if(entry.isIntersecting) {
 
     const pages = Math.ceil(totalHits / objectPage.per_page); 
     if(objectPage.page >= pages) {
-     
+
       Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
           observer.unobserve(guard);
     preloaderStop(); 
